@@ -13,8 +13,8 @@ public class HomeController {
 	@GetMapping("/user")
     public String greet(@AuthenticationPrincipal OAuth2User principal) {
         // GitHub se user ka naam nikalna
-        String name = principal.getAttribute("name");
-        return "Hey " + name + ", OAuth implementation successful!";
+        String login = principal.getAttribute("login");
+        return "Hey " +login + ", OAuth implementation successful!";
     }
 	
 	@GetMapping("/details")
