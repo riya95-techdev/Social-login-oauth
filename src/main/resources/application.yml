@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: social-login
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: Ov23liFC2lWvWi8hidce
+            client-secret: 3b6ddd581127c1748eb01565e4bfa1c637b3e5ac
