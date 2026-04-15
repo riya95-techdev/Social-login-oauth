@@ -13,11 +13,21 @@ public class SecurityConfig {
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
 		return http
-				.authorizeHttpRequests(auth -> {
-                    auth.anyRequest().authenticated(); // Abhi ke liye sab authentication maangte hain
-                })
-                .oauth2Login(org.springframework.security.config.Customizer.withDefaults()) // YE LINE ZAROORI HAI
-                .build();
+		
+		.authorizeHttpRequests(auth -> {
+            auth.requestMatchers("/").permitAll(); // Home page sabke liye
+            auth.anyRequest().authenticated();      // Baaki sab locked
+        })
+        .oauth2Login(org.springframework.security.config.Customizer.withDefaults())
+        
+        // Logout Configuration Start
+        .logout(logout -> logout
+            .logoutSuccessUrl("/") // Logout ke baad kahan jana hai
+            .permitAll()
+        )
+        // Logout Configuration End
+        
+        .build();
 	}
 	
 }
