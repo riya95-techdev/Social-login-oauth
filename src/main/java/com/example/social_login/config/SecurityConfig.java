@@ -22,9 +22,13 @@ public class SecurityConfig {
         
         // Logout Configuration Start
         .logout(logout -> logout
-            .logoutSuccessUrl("/") // Logout ke baad kahan jana hai
-            .permitAll()
-        )
+        	    .logoutUrl("/logout")
+        	    .logoutSuccessUrl("/") 
+        	    .invalidateHttpSession(true) // Pura session invalidate karo
+        	    .clearAuthentication(true)    // User details clear karo
+        	    .deleteCookies("JSESSIONID")  // Browser se cookie delete karo
+        	    .permitAll()
+        	)
         // Logout Configuration End
         
         .build();

@@ -14,12 +14,18 @@ public class HomeController {
     // 1. Sabse pehle ye chalega login ke baad (Ab ye /user par hai)
     @GetMapping("/user")
     public String greet(@AuthenticationPrincipal OAuth2User principal) {
-    	String name = principal.getAttribute("name");
-        if (name == null) name = principal.getAttribute("login"); // Username if name is null
+    	// Google uses "name", GitHub usually uses "name" or "login"
+        String name = principal.getAttribute("name");
+        String email = principal.getAttribute("email"); // Google specific
         
-        return "<h1>Hey " + name + "</h1>" +
-               "<p>OAuth implementation successful!</p>" +
-               "<a href='/logout'>Logout karke dekho</a>"; // Logout link        
+        if (name == null) {
+            name = principal.getAttribute("login"); // Fallback for GitHub
+        }
+        
+        return "<html><body>" +
+               "<h1>Hey " + name + " (" + (email != null ? email : "No Email") + "), OAuth successful!</h1>" +
+               "<br><a href='/logout' style='padding:10px; background-color:red; color:white; text-decoration:none; border-radius:5px;'>Logout</a>" +
+               "</body></html>";
         }
 	
     // 2. User ka saara data dekhne ke liye
@@ -31,9 +37,13 @@ public class HomeController {
     // 3. Public home page (Sab ke liye)
     @GetMapping("/")
     public String home() {
-    	return "<h1>Welcome to Home Page</h1>" +
-                "<p>Ye page sabke liye open hai.</p>" +
-                "<a href='/user'>Login with GitHub</a>";
+    	return "<html><body>" +
+                "<h1>Welcome to Home Page</h1>" +
+                "<p>Login using one of the providers below:</p>" +
+                "<a href='/oauth2/authorization/github'>Login with GitHub</a><br><br>" +
+                "<a href='/oauth2/authorization/google'>Login with Google</a>" +
+                "</body></html>";
+    			
     }
 
     // 4. Secured page
